@@ -24,8 +24,14 @@ class App(object):
         if output_dir is not None:
             if not os.path.isdir(output_dir):
                 os.makedirs(output_dir)
+        # from androguard.core.bytecodes.apk import APK
+        from androguard.util import set_log
 
-        from androguard.core.bytecodes.apk import APK
+        set_log("ERROR")  # 关闭琐碎的DEBUG输出
+        from androguard.core.apk import (
+            APK,
+        )  # NOTE: 修复 androguard>=4 出现的 ModuleNotFoundError: No module named 'androguard.core.bytecodes' 问题
+
         self.apk = APK(self.app_path)
         self.package_name = self.apk.get_package()
         self.app_name = self.apk.get_app_name()
@@ -51,7 +57,9 @@ class App(object):
         if self.main_activity is not None:
             return self.main_activity
         else:
-            self.logger.warning("Cannot get main activity from manifest. Using dumpsys result instead.")
+            self.logger.warning(
+                "Cannot get main activity from manifest. Using dumpsys result instead."
+            )
             return self.dumpsys_main_activity
 
     def get_start_intent(self):
@@ -73,9 +81,15 @@ class App(object):
         if self.get_main_activity():
             package_name += "/%s" % self.get_main_activity()
         if sampling is not None:
-            return Intent(prefix="start --start-profiler %s --sampling %d" % (trace_file, sampling), suffix=package_name)
+            return Intent(
+                prefix="start --start-profiler %s --sampling %d"
+                % (trace_file, sampling),
+                suffix=package_name,
+            )
         else:
-            return Intent(prefix="start --start-profiler %s" % trace_file, suffix=package_name)
+            return Intent(
+                prefix="start --start-profiler %s" % trace_file, suffix=package_name
+            )
 
     def get_stop_intent(self):
         """
@@ -88,17 +102,21 @@ class App(object):
     def get_possible_broadcasts(self):
         possible_broadcasts = set()
         for receiver in self.apk.get_receivers():
-            intent_filters = self.apk.get_intent_filters('receiver', receiver)
-            actions = intent_filters['action'] if 'action' in intent_filters else []
-            categories = intent_filters['category'] if 'category' in intent_filters else []
+            intent_filters = self.apk.get_intent_filters("receiver", receiver)
+            actions = intent_filters["action"] if "action" in intent_filters else []
+            categories = (
+                intent_filters["category"] if "category" in intent_filters else []
+            )
             categories.append(None)
             for action in actions:
                 for category in categories:
-                    intent = Intent(prefix='broadcast', action=action, category=category)
+                    intent = Intent(
+                        prefix="broadcast", action=action, category=category
+                    )
                     possible_broadcasts.add(intent)
         return possible_broadcasts
 
-    def get_hashes(self, block_size=2 ** 8):
+    def get_hashes(self, block_size=2**8):
         """
         Calculate MD5,SHA-1, SHA-256
         hashes of APK input file
@@ -107,7 +125,7 @@ class App(object):
         md5 = hashlib.md5()
         sha1 = hashlib.sha1()
         sha256 = hashlib.sha256()
-        f = open(self.app_path, 'rb')
+        f = open(self.app_path, "rb")
         while True:
             data = f.read(block_size)
             if not data:
