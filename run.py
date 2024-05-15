@@ -3,6 +3,7 @@ import os
 from glob import glob
 import shutil
 import random
+import argparse
 
 
 # droidbot -keep_env -grant_perm -ignore_ad -count 10800 -a "Firefox Fast & Private Browser_125.3.0_APKPure.apk" -o output_dir_apk_name
@@ -62,6 +63,7 @@ def process_one_apk(
             return True
         # begin processing
         shutil.move(apk_fp, processing_fp)
+        print(f"Processing {apk_fp}")
         ok = run_droidbot(
             processing_fp, os.path.join(output_category_dir, apk_fn), device_serial
         )
@@ -74,7 +76,7 @@ def process_one_apk(
 
 def worker(
     category: str = "tools",  # need to change this
-    device_serial: str = "emulator-5554",  # need to change this, use `adb devices` to get the serial number
+    device_serial: str = "HA1PZJW9",  # need to change this, use `adb devices` to get the serial number
     input_root_dir: str = "apks",
     output_root_dir: str = "utg",
 ):
@@ -96,7 +98,7 @@ def worker(
             output_category_dir,
             device_serial,
         ):
-            print(f"Error processing {category} apk, exiting")
+            print(f"Error encountered when processing {category} apks")
             break
         cnt += 1
         if cnt % 10 == 0:
@@ -106,9 +108,43 @@ def worker(
 
 
 if __name__ == "__main__":
-    category = "tools"  # need to change this
-    device_serial = "emulator-5554"  # need to change this, use `adb devices` to get the serial number
+    parser = argparse.ArgumentParser(description="Run DroidBot on APKs")
+    parser.add_argument(
+        "-d",
+        action="store",
+        dest="device_serial",
+        #required=True,
+        default="HA1PZJW9",
+        help="The serial number of target device (use `adb devices` to find)",
+    )
+    parser.add_argument(
+        "-i",
+        action="store",
+        dest="input_root",
+        #required=True,
+        default="apks",
+        help="directory of input",
+    )
+    parser.add_argument(
+        "-o",
+        action="store",
+        dest="output_dir",
+        #required=True,
+        default="utg",
+        help="directory of output",
+    )
+    parser.add_argument(
+        "-c",
+        action="store",
+        dest="category",
+        #required=True,
+        default="tools",
+        help="category of APKs",
+    )
 
-    input_root_dir = "apks"
-    output_root_dir = "utg"
+    args = parser.parse_args()
+    category = args.category
+    device_serial = args.device_serial
+    input_root_dir = args.input_root
+    output_root_dir = args.output_dir
     worker(category, device_serial, input_root_dir, output_root_dir)
