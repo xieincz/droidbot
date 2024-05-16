@@ -27,12 +27,13 @@ def run_droidbot(apk_path: str, output_dir_path: str, device_serial: str):
             "-d",
             device_serial,
         ],
-        capture_output=True,
+        #capture_output=True,
+        shell=True,
     )
     if ret.returncode != 0:
-        print(ret.stdout.decode("utf-8"))
-        print("\n")
-        print(ret.stderr.decode("utf-8"))
+        #print(ret.stdout.decode("utf-8"))
+        #print("\n")
+        #print(ret.stderr.decode("utf-8"))
         return False
     return True
 
