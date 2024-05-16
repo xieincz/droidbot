@@ -11,7 +11,7 @@ import argparse
 # The easiest way to determine a device's serial number is calling `adb devices`.
 def run_droidbot(apk_path: str, output_dir_path: str, device_serial: str):
     assert os.path.exists(apk_path), "APK file not found"
-    ret = sp.run(
+    """ret = sp.run(
         [
             "droidbot",
             "-keep_env",
@@ -27,13 +27,16 @@ def run_droidbot(apk_path: str, output_dir_path: str, device_serial: str):
             "-d",
             device_serial,
         ],
-        #capture_output=True,
+        capture_output=True,
+    )"""
+    ret = sp.run(
+        f"droidbot -keep_env -grant_perm -ignore_ad -count 18000 -a {apk_path} -o {output_dir_path} -d {device_serial}",
         shell=True,
     )
     if ret.returncode != 0:
-        #print(ret.stdout.decode("utf-8"))
-        #print("\n")
-        #print(ret.stderr.decode("utf-8"))
+        # print(ret.stdout.decode("utf-8"))
+        # print("\n")
+        # print(ret.stderr.decode("utf-8"))
         return False
     return True
 
@@ -114,7 +117,7 @@ if __name__ == "__main__":
         "-d",
         action="store",
         dest="device_serial",
-        #required=True,
+        # required=True,
         default="HA1PZJW9",
         help="The serial number of target device (use `adb devices` to find)",
     )
@@ -122,7 +125,7 @@ if __name__ == "__main__":
         "-i",
         action="store",
         dest="input_root",
-        #required=True,
+        # required=True,
         default="apks",
         help="directory of input",
     )
@@ -130,7 +133,7 @@ if __name__ == "__main__":
         "-o",
         action="store",
         dest="output_dir",
-        #required=True,
+        # required=True,
         default="utg",
         help="directory of output",
     )
@@ -138,7 +141,7 @@ if __name__ == "__main__":
         "-c",
         action="store",
         dest="category",
-        #required=True,
+        # required=True,
         default="tools",
         help="category of APKs, must be a subdirectory of the input folder",
     )
