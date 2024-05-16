@@ -9,7 +9,7 @@ import argparse
 # droidbot -keep_env -grant_perm -ignore_ad -count 10800 -a "Firefox Fast & Private Browser_125.3.0_APKPure.apk" -o output_dir_apk_name
 # If you are using multiple devices, you may need to use -d <device_serial> to specify the target device.
 # The easiest way to determine a device's serial number is calling `adb devices`.
-def run_droidbot(apk_path: str, output_dir_path: str, device_serial: str):
+def run_droidbot_v1(apk_path: str, output_dir_path: str, device_serial: str):
     assert os.path.exists(apk_path), "APK file not found"
     """ret = sp.run(
         [
@@ -39,6 +39,21 @@ def run_droidbot(apk_path: str, output_dir_path: str, device_serial: str):
         # print(ret.stderr.decode("utf-8"))
         return False
     return True
+
+
+def run_droidbot(apk_path: str, output_dir_path: str, device_serial: str):
+    assert os.path.exists(apk_path), "APK file not found"
+    command = f"droidbot -keep_env -grant_perm -ignore_ad -count 18000 -a {apk_path} -o {output_dir_path} -d {device_serial}"
+    process = sp.Popen(command, shell=True, stdout=sp.PIPE, stderr=sp.STDOUT)
+    # 实时打印输出
+    while True:
+        output = process.stdout.readline()
+        if output == b"" and process.poll() is not None:
+            break
+        if output:
+            print(output.strip().decode("utf-8"))
+    rc = process.poll()
+    return rc == 0
 
 
 def contains_apk_files(directory: str):
