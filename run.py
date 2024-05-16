@@ -139,7 +139,7 @@ if __name__ == "__main__":
         dest="category",
         #required=True,
         default="tools",
-        help="category of APKs",
+        help="category of APKs, must be a subdirectory of the input folder",
     )
 
     args = parser.parse_args()
