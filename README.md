@@ -16,7 +16,8 @@ Clone this repo and install with `pip`:
 ```shell
 conda create -n droidbot python=3.10 -y
 conda activate droidbot
-pip install -e .
+#pip install -U -e .
+pip install -r requirements.txt
 ```
 
 If successfully installed, you should be able to execute `droidbot -h`.
