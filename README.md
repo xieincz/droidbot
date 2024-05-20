@@ -5,8 +5,8 @@
 ## Prerequisite
 
 1. `Python` (Python 3.10 is recommended)
-2. `Java` (JDK1.8 is recommended)
-3. `Android SDK`
+2. `Java` (JDK1.8 is recommended. [Available here](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html) )
+3. `Android SDK` (All you need is `platform_tools`. Available here: [Windows](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) [Linux](https://dl.google.com/android/repository/platform-tools-latest-linux.zip) [Mac](https://dl.google.com/android/repository/platform-tools-latest-darwin.zip) )
 4. Add `platform_tools` directory in Android SDK to `PATH`
 
 ## How to install
@@ -16,7 +16,6 @@ Clone this repo and install with `pip`:
 ```shell
 conda create -n droidbot python=3.10 -y
 conda activate droidbot
-cd droidbot/
 pip install -e .
 ```
 
@@ -44,7 +43,6 @@ Connect your android devices to that computer via adb, you should be able to see
 
 ```bash
 conda activate droidbot
-cd droidbot/
 python run.py -d HA1PZJW9 -i path/to/apks_dir -o path/to/output_dir -c tools
 #-d: The serial number of target device (use `adb devices` to find)
 #-i: directory of input
