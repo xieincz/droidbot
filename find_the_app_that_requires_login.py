@@ -83,7 +83,7 @@ def process_category(category, input_root_dir, output_root_dir, tqdm_pos=0):
 
 
 def main():
-    input_root_dir = "apks"
+    input_root_dir = "/home/xb/data/datasets/apks/unziped"
     output_root_dir = "need_login"
     os.makedirs(output_root_dir, exist_ok=True)
     categorys = os.listdir(input_root_dir)
