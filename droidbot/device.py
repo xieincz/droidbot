@@ -633,7 +633,7 @@ class Device(object):
                 print("Please wait while installing the app...")
                 time.sleep(2)
             #HACK: 授予管理存储设备上的所有文件的权限 https://developer.android.com/training/data-storage/manage-all-files?hl=zh-cn
-            if self.grant_perm and self.get_sdk_version() >= 23:
+            if self.grant_perm and self.get_sdk_version() >= 30:#MANAGE_EXTERNAL_STORAGE是安卓11才开始新增的
                 self.adb.shell(f"appops set --uid {package_name} MANAGE_EXTERNAL_STORAGE allow")
             if not self.connected:
                 install_p.terminate()
