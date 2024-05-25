@@ -43,7 +43,22 @@ def run_droidbot_v1(apk_path: str, output_dir_path: str, device_serial: str):
 
 def run_droidbot(apk_path: str, output_dir_path: str, device_serial: str):
     assert os.path.exists(apk_path), "APK file not found"
-    run=["droidbot", "-keep_env", "-grant_perm", "-ignore_ad", "-count", "18000", "-a", apk_path, "-o", output_dir_path, "-d", device_serial]
+    run = [
+        "droidbot",
+        "-keep_env",
+        "-grant_perm",
+        "-ignore_ad",
+        "-count",
+        "18000",
+        "-a",
+        apk_path,
+        "-o",
+        output_dir_path,
+        "-d",
+        device_serial,
+        "-policy",
+        "dfs_greedy",
+    ]
     process = sp.Popen(run, stdout=sp.PIPE, stderr=sp.STDOUT)
     # 实时打印输出
     while True:
